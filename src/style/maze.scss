@@ -1,0 +1,23 @@
+.maze {
+  height: 15 * (20px + (1 * 2) + (1 * 2));
+  width: 15 * (20px + (1 * 2) + (1 * 2));
+  margin: 20px auto;
+
+  &__row {
+    overflow: hidden;
+  }
+
+  &__cell {
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+    border: 1px solid #ecf0f1;
+    border-radius: 3px;
+  }
+
+  &--right  {}
+  &--left   {}
+  &--top    {}
+  &--bottom {}
+}
