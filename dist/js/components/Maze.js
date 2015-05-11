@@ -130,16 +130,12 @@ define(["exports", "module", "react", "utils/BEM", "utils/helper"], function (ex
               "div",
               { className: b("row") },
               row.map(function (cell, index) {
-                return _React.createElement(
-                  "div",
-                  { className: b("cell", {
-                      top: cell.top,
-                      left: cell.left,
-                      bottom: cell.bottom,
-                      right: cell.right
-                    }) },
-                  cell.value
-                );
+                return _React.createElement("div", { className: b("cell", {
+                    top: cell.top,
+                    left: cell.left,
+                    bottom: cell.bottom,
+                    right: cell.right
+                  }) });
               })
             );
           })

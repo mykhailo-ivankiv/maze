@@ -96,7 +96,7 @@ class Maze extends React.Component {
             left: cell.left,
             bottom: cell.bottom,
             right: cell.right
-           })}>{cell.value}</div>)}
+           })}></div>)}
         </div>))}
       </div>
     )
