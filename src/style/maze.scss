@@ -14,7 +14,7 @@ $wall-color: #1b1b1b;
     width: 20px;
     height: 20px;
     margin: 1px;
-    border: 2px solid #ECF0F1;
+    border: 2px solid transparent; //#ECF0F1
     font: 8px/20px Pt Sans;
     text-align: center;
 

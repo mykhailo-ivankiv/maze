@@ -30,47 +30,59 @@ class Maze extends React.Component {
         if (Math.random() < 0.5 && startSet[i-1] !== undefined) { startSet[i] = startSet[i-1]; }
       });
 
-      let setLength = 1;
-      let bottomBorder = [];
-
-      startSet.forEach((el, k) => {
-        if (startSet[k+1] !== undefined && startSet[k+1] === el) {
-          setLength += 1;
-        } else {
-          let doorCount = getRandomInt(1, setLength);
-          bottomBorder = bottomBorder.concat(Array
-            .apply(null, {length: setLength})
-            .map((el, i, array) => {
-              if (array.length - i === doorCount) {
-                doorCount -= 1;
-                return false;
-              } else if (doorCount === 0) {
-                return true;
-              } else {
-                if (Math.random() > 0.3) {
-                  doorCount -= 1;
-                  return false;
-                } else {
-                  return true;
-                }
-              }
-            }));
-
-          setLength = 1;
-          ;
-        }
-      });
+      let bottomBorders = this.getBottomBordersArray(startSet);
 
       result.push(startSet.map((el, j) => ({
         top: i === 0,
         left: j === 0 || (startSet[el - 1] !== undefined && el !== startSet[j - 1]),
-        bottom: i === (MAZE_LENGTH - 1) || bottomBorder[j],
+        bottom: i === (MAZE_LENGTH - 1) || bottomBorders[j],
         right: j === (MAZE_WIDTH - 1),
         value: el
       })));
+
+      startSet = startSet.map((el, i) => {
+        return bottomBorders[i] ? i : el;
+      });
+
+      console.log(JSON.stringify(startSet));
     }
 
     return result;
+  }
+
+  getBottomBordersArray (startSet) {
+    let setLength = 1;
+    let bottomBorders = [];
+
+    startSet.forEach((el, k) => {
+      if (startSet[k+1] !== undefined && startSet[k+1] === el) {
+        setLength += 1;
+      } else {
+
+        let doorCount = 1 //getRandomInt(1, setLength);
+        bottomBorders = bottomBorders.concat(Array
+          .apply(null, {length: setLength})
+          .map((el, i, array) => {
+            if (array.length - i === doorCount) {
+              doorCount -= 1;
+              return false;
+            } else if (doorCount === 0) {
+              return true;
+            } else {
+              if (Math.random() > 0.3) {
+                doorCount -= 1;
+                return false;
+              } else {
+                return true;
+              }
+            }
+          }));
+
+        setLength = 1;
+      }
+    });
+
+    return bottomBorders;
   }
 
   render () {
