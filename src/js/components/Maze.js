@@ -1,5 +1,6 @@
 import React from "react";
 import BEM from "utils/BEM";
+import {getRandomInt} from "utils/helper";
 
 var b = BEM.b("maze");
 
@@ -7,40 +8,69 @@ class Maze extends React.Component {
   constructor (pref) {
     super();
     this.state = {
-      maze: [
-        [
-          { top: true, left: true,  bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: true, bottom: false, right: false},
-          { top: true, left: false, bottom: true, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: false},
-          { top: true, left: false, bottom: false, right: true }
-        ],
-        [
-          { top: false, left: true,  bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: true, bottom: false, right: false},
-          { top: false, left: false, bottom: true, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: false},
-          { top: false, left: false, bottom: false, right: true }
-        ]
-
-      ]
+      maze: this.renderMaze()
     };
+  }
+
+  /**
+   * Eller's Algorithm
+   * RU - http://habrahabr.ru/post/176671/
+   * EN - http://www.neocomputer.org/projects/eller.html
+   */
+
+  renderMaze () {
+    const MAZE_WIDTH = 13;
+    const MAZE_LENGTH = 13;
+
+    let startSet = Array.apply(null, {length: MAZE_WIDTH}).map((el, i)=> i);
+    let result = [];
+
+    for (let i=0; i < MAZE_LENGTH; i += 1) {
+      startSet.forEach((el, i) => {
+        if (Math.random() < 0.5 && startSet[i-1] !== undefined) { startSet[i] = startSet[i-1]; }
+      });
+
+      let setLength = 1;
+      let bottomBorder = [];
+
+      startSet.forEach((el, k) => {
+        if (startSet[k+1] !== undefined && startSet[k+1] === el) {
+          setLength += 1;
+        } else {
+          let doorCount = getRandomInt(1, setLength);
+          bottomBorder = bottomBorder.concat(Array
+            .apply(null, {length: setLength})
+            .map((el, i, array) => {
+              if (array.length - i === doorCount) {
+                doorCount -= 1;
+                return false;
+              } else if (doorCount === 0) {
+                return true;
+              } else {
+                if (Math.random() > 0.3) {
+                  doorCount -= 1;
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            }));
+
+          setLength = 1;
+          ;
+        }
+      });
+
+      result.push(startSet.map((el, j) => ({
+        top: i === 0,
+        left: j === 0 || (startSet[el - 1] !== undefined && el !== startSet[j - 1]),
+        bottom: i === (MAZE_LENGTH - 1) || bottomBorder[j],
+        right: j === (MAZE_WIDTH - 1),
+        value: el
+      })));
+    }
+
+    return result;
   }
 
   render () {
@@ -54,7 +84,7 @@ class Maze extends React.Component {
             left: cell.left,
             bottom: cell.bottom,
             right: cell.right
-           })}>{index}</div>)}
+           })}>{cell.value}</div>)}
         </div>))}
       </div>
     )
