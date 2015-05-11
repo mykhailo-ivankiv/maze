@@ -1,0 +1,25 @@
+.maze {
+  height: 360px;
+  width: 360px;
+  margin: 20px auto; }
+  .maze__row {
+    overflow: hidden; }
+  .maze__cell {
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+    border: 2px solid transparent;
+    font: 8px/20px Pt Sans;
+    text-align: center; }
+    .maze__cell--right {
+      border-right: 2px solid #1b1b1b; }
+    .maze__cell--left {
+      border-left: 2px solid #1b1b1b; }
+    .maze__cell--top {
+      border-top: 2px solid #1b1b1b; }
+    .maze__cell--bottom {
+      border-bottom: 2px solid #1b1b1b; }
+
+
+/*# sourceMappingURL=../style/maze.css.map */
