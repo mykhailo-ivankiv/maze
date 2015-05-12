@@ -23,12 +23,35 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
       _classCallCheck(this, ProgressController);
 
       _get(Object.getPrototypeOf(ProgressController.prototype), "constructor", this).call(this);
-      this.state = {};
+      this.state = {
+        totalProgress: _storageMazeStore.MazeStore.getTotalProgress(),
+        activeProgress: _storageMazeStore.MazeStore.getActiveProgress(),
+        fullSize: 15
+      };
     }
 
     _inherits(ProgressController, _React$Component);
 
     _createClass(ProgressController, [{
+      key: "onMazeChange",
+      value: function onMazeChange() {
+        this.setState({
+          totalProgress: _storageMazeStore.MazeStore.getTotalProgress(),
+          activeProgress: _storageMazeStore.MazeStore.getActiveProgress() });
+      }
+    }, {
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.unsubscribe = [_storageMazeStore.MazeStore.listen(this.onMazeChange.bind(this))];
+      }
+    }, {
+      key: "componentWillUnmount",
+      value: function componentWillUnmount() {
+        this.unsubscribe.map(function (fn) {
+          return fn();
+        });
+      }
+    }, {
       key: "nextMazeStep",
       value: function nextMazeStep() {
         _storageMazeStore.MazeActions.goToNextRow();
@@ -41,11 +64,16 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
     }, {
       key: "play",
       value: function play() {
+        this.timer = setInterval(function () {
+          return _storageMazeStore.MazeActions.goToNextRow();
+        }, 1500);
+
         this.setState({ play: true });
       }
     }, {
       key: "pause",
       value: function pause() {
+        clearTimeout(this.timer);
         this.setState({ play: false });
       }
     }, {
@@ -76,9 +104,8 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
           _React.createElement(
             "div",
             { className: b("progress") },
-            _React.createElement("div", { className: b("total-progress") }),
-            _React.createElement("div", { className: b("active-position") }),
-            _React.createElement("div", { className: b("slider") })
+            _React.createElement("div", { style: { width: this.state.totalProgress * 100 / 15 + "%" }, className: b("total-progress") }),
+            _React.createElement("div", { style: { width: this.state.activeProgress * 100 / 15 + "%" }, className: b("active-position") })
           )
         );
       }

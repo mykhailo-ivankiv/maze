@@ -1,5 +1,30 @@
 .progress-controller {
   text-align: center; }
+  .progress-controller__progress {
+    width: 450px;
+    height: 5px;
+    background: #bdc3c7;
+    display: inline-block;
+    border-radius: 5px;
+    position: relative; }
+  .progress-controller__total-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 400px;
+    height: 5px;
+    background: #3498db;
+    display: inline-block;
+    border-radius: 5px; }
+  .progress-controller__active-position {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 350px;
+    height: 5px;
+    background: #e74c3c;
+    display: inline-block;
+    border-radius: 5px; }
 
 
 /*# sourceMappingURL=../style/progress-controller.css.map */

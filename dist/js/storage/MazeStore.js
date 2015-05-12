@@ -107,7 +107,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
             break;
           }
 
-          return context$1$0.delegateYield(_loop(rowIndex), "t155", 8);
+          return context$1$0.delegateYield(_loop(rowIndex), "t187", 8);
 
         case 8:
           rowIndex += 1;
@@ -165,6 +165,14 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
     getMaze: function getMaze() {
       return maze.slice(0, this.pointer);
+    },
+
+    getTotalProgress: function getTotalProgress() {
+      return maze.length;
+    },
+
+    getActiveProgress: function getActiveProgress() {
+      return this.pointer;
     }
   });
   exports.MazeStore = MazeStore;

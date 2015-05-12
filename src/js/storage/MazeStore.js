@@ -117,5 +117,13 @@ export var MazeStore = Reflux.createStore({
 
   getMaze () {
     return maze.slice(0, this.pointer);
+  },
+
+  getTotalProgress () {
+    return maze.length;
+  },
+
+  getActiveProgress () {
+    return this.pointer;
   }
 });
