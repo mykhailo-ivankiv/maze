@@ -9,10 +9,6 @@ class Maze extends React.Component {
   constructor (pref) {
     super();
     this.state = { maze: MazeStore.getMaze() };
-
-    setInterval(() => {
-      MazeActions.goToNextRow();
-    }, 1500)
   }
 
   onMazeChange () {

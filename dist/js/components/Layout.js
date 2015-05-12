@@ -1,4 +1,4 @@
-define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], function (exports, module, _react, _utilsBEM, _storageMazeStore) {
+define(["exports", "module", "react", "utils/BEM", "components/Maze", "components/ProgressController"], function (exports, module, _react, _utilsBEM, _componentsMaze, _componentsProgressController) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
@@ -11,90 +11,49 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
 
   var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-  var marked0$0 = [foo].map(regeneratorRuntime.mark);
-
   var _React = _interopRequire(_react);
 
   var _BEM = _interopRequire(_utilsBEM);
 
-  var b = _BEM.b("maze");
+  var _Maze = _interopRequire(_componentsMaze);
 
-  var Maze = (function (_React$Component) {
-    function Maze(pref) {
-      _classCallCheck(this, Maze);
+  var _ProgressController = _interopRequire(_componentsProgressController);
 
-      _get(Object.getPrototypeOf(Maze.prototype), "constructor", this).call(this);
-      this.state = { maze: _storageMazeStore.MazeStore.getMaze() };
+  var b = _BEM.b("layout");
+
+  var Layout = (function (_React$Component) {
+    function Layout(pref) {
+      _classCallCheck(this, Layout);
+
+      _get(Object.getPrototypeOf(Layout.prototype), "constructor", this).call(this);
+      this.state = {};
     }
 
-    _inherits(Maze, _React$Component);
+    _inherits(Layout, _React$Component);
 
-    _createClass(Maze, [{
-      key: "onMazeChange",
-      value: function onMazeChange() {
-        this.setState({ maze: _storageMazeStore.MazeStore.getMaze() });
-      }
-    }, {
-      key: "componentDidMount",
-      value: function componentDidMount() {
-        this.unsubscribe = [_storageMazeStore.MazeStore.listen(this.onMazeChange.bind(this))];
-      }
-    }, {
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        this.unsubscribe.map(function (fn) {
-          return fn();
-        });
-      }
-    }, {
+    _createClass(Layout, [{
       key: "render",
       value: function render() {
-        var maze = this.state.maze;
-
         return _React.createElement(
           "div",
           { className: b() },
-          maze.map(function (row) {
-            return _React.createElement(
-              "div",
-              { className: b("row") },
-              row.map(function (cell, index) {
-                return _React.createElement(
-                  "div",
-                  { className: b("cell", {
-                      top: cell.top,
-                      left: cell.left,
-                      bottom: cell.bottom,
-                      right: cell.right
-                    }) },
-                  cell.value
-                );
-              })
-            );
-          })
+          _React.createElement(
+            "div",
+            { className: b("tools") },
+            _React.createElement(_ProgressController, null)
+          ),
+          _React.createElement(
+            "div",
+            { className: b("maze") },
+            _React.createElement(_Maze, null)
+          )
         );
       }
     }]);
 
-    return Maze;
+    return Layout;
   })(_React.Component);
 
-  module.exports = Maze;
-
-  function foo() {
-    var pointer;
-    return regeneratorRuntime.wrap(function foo$(context$1$0) {
-      while (1) switch (context$1$0.prev = context$1$0.next) {
-        case 0:
-          pointer = 0;
-          context$1$0.next = 3;
-          return pointer++;
-
-        case 3:
-        case "end":
-          return context$1$0.stop();
-      }
-    }, marked0$0[0], this);
-  }
+  module.exports = Layout;
 });
-//# sourceMappingURL=../../js/components/Maze.js.map
+//# sourceMappingURL=../../js/components/Layout.js.map

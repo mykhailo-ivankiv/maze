@@ -1,4 +1,4 @@
 import React from "react";
-import Maze from "components/Maze"
+import Layout from "components/Layout"
 
-React.render(<Maze />, document.body);
+React.render(<Layout />, document.body);

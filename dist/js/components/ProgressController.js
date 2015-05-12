@@ -11,90 +11,82 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
 
   var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-  var marked0$0 = [foo].map(regeneratorRuntime.mark);
-
   var _React = _interopRequire(_react);
 
   var _BEM = _interopRequire(_utilsBEM);
 
-  var b = _BEM.b("maze");
+  var b = _BEM.b("progress-controller");
+  var f = _BEM.b("form-element");
 
-  var Maze = (function (_React$Component) {
-    function Maze(pref) {
-      _classCallCheck(this, Maze);
+  var ProgressController = (function (_React$Component) {
+    function ProgressController(pref) {
+      _classCallCheck(this, ProgressController);
 
-      _get(Object.getPrototypeOf(Maze.prototype), "constructor", this).call(this);
-      this.state = { maze: _storageMazeStore.MazeStore.getMaze() };
+      _get(Object.getPrototypeOf(ProgressController.prototype), "constructor", this).call(this);
+      this.state = {};
     }
 
-    _inherits(Maze, _React$Component);
+    _inherits(ProgressController, _React$Component);
 
-    _createClass(Maze, [{
-      key: "onMazeChange",
-      value: function onMazeChange() {
-        this.setState({ maze: _storageMazeStore.MazeStore.getMaze() });
+    _createClass(ProgressController, [{
+      key: "nextMazeStep",
+      value: function nextMazeStep() {
+        _storageMazeStore.MazeActions.goToNextRow();
       }
     }, {
-      key: "componentDidMount",
-      value: function componentDidMount() {
-        this.unsubscribe = [_storageMazeStore.MazeStore.listen(this.onMazeChange.bind(this))];
+      key: "prevMazeStep",
+      value: function prevMazeStep() {
+        _storageMazeStore.MazeActions.goToPrevRow();
       }
     }, {
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        this.unsubscribe.map(function (fn) {
-          return fn();
-        });
+      key: "play",
+      value: function play() {
+        this.setState({ play: true });
+      }
+    }, {
+      key: "pause",
+      value: function pause() {
+        this.setState({ play: false });
       }
     }, {
       key: "render",
       value: function render() {
-        var maze = this.state.maze;
-
         return _React.createElement(
           "div",
           { className: b() },
-          maze.map(function (row) {
-            return _React.createElement(
-              "div",
-              { className: b("row") },
-              row.map(function (cell, index) {
-                return _React.createElement(
-                  "div",
-                  { className: b("cell", {
-                      top: cell.top,
-                      left: cell.left,
-                      bottom: cell.bottom,
-                      right: cell.right
-                    }) },
-                  cell.value
-                );
-              })
-            );
-          })
+          _React.createElement(
+            "button",
+            { className: f("button"), onClick: this.prevMazeStep.bind(this) },
+            _React.createElement("i", { className: "fa fa-backward" })
+          ),
+          this.state.play ? _React.createElement(
+            "button",
+            { className: f("button"), onClick: this.pause.bind(this) },
+            _React.createElement("i", { className: "fa fa-pause" })
+          ) : _React.createElement(
+            "button",
+            { className: f("button"), onClick: this.play.bind(this) },
+            _React.createElement("i", { className: "fa fa-play" })
+          ),
+          _React.createElement(
+            "button",
+            { className: f("button"), onClick: this.nextMazeStep.bind(this) },
+            _React.createElement("i", { className: "fa fa-forward" })
+          ),
+          _React.createElement(
+            "div",
+            { className: b("progress") },
+            _React.createElement("div", { className: b("total-progress") }),
+            _React.createElement("div", { className: b("active-position") }),
+            _React.createElement("div", { className: b("slider") })
+          )
         );
       }
     }]);
 
-    return Maze;
+    return ProgressController;
   })(_React.Component);
 
-  module.exports = Maze;
-
-  function foo() {
-    var pointer;
-    return regeneratorRuntime.wrap(function foo$(context$1$0) {
-      while (1) switch (context$1$0.prev = context$1$0.next) {
-        case 0:
-          pointer = 0;
-          context$1$0.next = 3;
-          return pointer++;
-
-        case 3:
-        case "end":
-          return context$1$0.stop();
-      }
-    }, marked0$0[0], this);
-  }
+  module.exports = ProgressController;
 });
-//# sourceMappingURL=../../js/components/Maze.js.map
+//# sourceMappingURL=../../js/components/ProgressController.js.map

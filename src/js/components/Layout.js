@@ -1,5 +1,9 @@
-import React from "react/addons";
+import React from "react";
 import BEM from "utils/BEM";
+
+import Maze from "components/Maze"
+import ProgressController from "components/ProgressController"
+
 
 var b = BEM.b("layout");
 
@@ -12,7 +16,8 @@ class Layout extends React.Component {
   render () {
     return (
       <div className={b()}>
-        Layout
+        <div className = {b("tools")}><ProgressController/></div>
+        <div className = {b("maze")}><Maze/></div>
       </div>
     )
   };

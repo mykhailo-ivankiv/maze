@@ -101,14 +101,21 @@ var mazeGenerator = renderMaze();
 var maze = mazeGenerator.next().value;
 
 export var MazeStore = Reflux.createStore({
+  pointer : 0,
   listenables: MazeActions,
 
   onGoToNextRow() {
-    maze = mazeGenerator.next().value;
-    this.trigger(maze);
+    this.pointer += 1;
+    if (maze.length < this.pointer) {maze = mazeGenerator.next().value;}
+    this.trigger();
+  },
+
+  onGoToPrevRow () {
+    this.pointer -= 1;
+    this.trigger();
   },
 
   getMaze () {
-    return maze;
+    return maze.slice(0, this.pointer);
   }
 });
