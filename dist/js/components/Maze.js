@@ -1,4 +1,4 @@
-define(["exports", "module", "react", "utils/BEM", "immutable", "utils/helper"], function (exports, module, _react, _utilsBEM, _immutable, _utilsHelper) {
+define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], function (exports, module, _react, _utilsBEM, _storageMazeStore) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
@@ -11,11 +11,11 @@ define(["exports", "module", "react", "utils/BEM", "immutable", "utils/helper"],
 
   var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
+  var marked0$0 = [foo].map(regeneratorRuntime.mark);
+
   var _React = _interopRequire(_react);
 
   var _BEM = _interopRequire(_utilsBEM);
-
-  var _Immutable = _interopRequire(_immutable);
 
   var b = _BEM.b("maze");
 
@@ -24,130 +24,31 @@ define(["exports", "module", "react", "utils/BEM", "immutable", "utils/helper"],
       _classCallCheck(this, Maze);
 
       _get(Object.getPrototypeOf(Maze.prototype), "constructor", this).call(this);
-      this.state = {
-        maze: this.renderMaze()
-      };
+      this.state = { maze: _storageMazeStore.MazeStore.getMaze() };
+
+      setInterval(function () {
+        _storageMazeStore.MazeActions.goToNextRow();
+      }, 1500);
     }
 
     _inherits(Maze, _React$Component);
 
     _createClass(Maze, [{
-      key: "renderMaze",
-
-      /**
-       * Eller's Algorithm
-       * RU - http://habrahabr.ru/post/176671/
-       * EN - http://www.neocomputer.org/projects/eller.html
-       */
-
-      value: function renderMaze() {
-        var _this2 = this;
-
-        var MAZE_WIDTH = 15;
-        var MAZE_LENGTH = 15;
-
-        var startSet = Array.apply(null, { length: MAZE_WIDTH }).map(function (el, i) {
-          return {
-            top: false,
-            left: false,
-            bottom: false,
-            right: false,
-            value: i
-          };
-        });
-        var result = [];
-
-        var _loop = function (rowIndex) {
-          var lengthOfSubset = 1;
-
-          startSet.map(function (cell, cellIndex) {
-            if (startSet[cellIndex + 1] !== undefined && startSet[cellIndex + 1].value === cell.value) {
-              cell.right = true;
-            } else if (Math.random() < 0.5 && startSet[cellIndex + 1] !== undefined) {
-              startSet[cellIndex + 1].value = cell.value;
-            } else {
-              cell.right = true;
-            }
-
-            cell.top = rowIndex === 0;
-            cell.left = cellIndex === 0;
-            cell.right = cellIndex === MAZE_WIDTH - 1 || cell.right;
-
-            return cell;
-          }).map(function (el, k) {
-            if (startSet[k + 1] !== undefined && startSet[k + 1].value === el.value) {
-              lengthOfSubset += 1;
-            } else {
-              var doorCount = _utilsHelper.getRandomInt(1, lengthOfSubset);
-
-              for (var f = k; f > k - lengthOfSubset; f -= 1) {
-                if (doorCount === 0) {
-                  startSet[f].bottom = true;
-                } else if (doorCount === f - k + lengthOfSubset) {
-                  doorCount -= 1;
-                  startSet[f].bottom = false;
-                } else if (Math.random() > 0.5) {
-                  startSet[f].bottom = true;
-                } else {
-                  doorCount -= 1;
-                  startSet[f].bottom = false;
-                }
-              }
-
-              lengthOfSubset = 1;
-            }
-          });
-
-          result.push(startSet);
-
-          startSet = _Immutable.fromJS(startSet).toJS().map(function (el, index, array) {
-            if (el.bottom) {
-              el.value = _this2.getFirstUniqueInt(array.map(function (el) {
-                return el.value;
-              }));
-            }
-            el.bottom = false;
-            el.right = false;
-            return el;
-          });
-        };
-
-        for (var rowIndex = 0; rowIndex < MAZE_LENGTH; rowIndex += 1) {
-          _loop(rowIndex);
-        }
-
-        result[result.length - 1].forEach(function (el, index, array) {
-          el.bottom = true;
-
-          if (array[index + 1]) {
-            console.log(el.value, array[index + 1].value, array.map(function (el) {
-              return el.value;
-            }));
-          }
-
-          if (array[index + 1] && el.value !== array[index + 1].value) {
-            el.right = false;
-            array[index + 1].value = el.value;
-          }
-        });
-
-        return result;
+      key: "onMazeChange",
+      value: function onMazeChange() {
+        this.setState({ maze: _storageMazeStore.MazeStore.getMaze() });
       }
     }, {
-      key: "getFirstUniqueInt",
-      value: function getFirstUniqueInt(arr) {
-        var result = 0;
-
-        while (arr.indexOf(result) >= 0) {
-          result += 1;
-        }
-
-        return result;
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.unsubscribe = [_storageMazeStore.MazeStore.listen(this.onMazeChange.bind(this))];
       }
     }, {
-      key: "newMaze",
-      value: function newMaze() {
-        this.setState({ maze: this.renderMaze() });
+      key: "componentWillUnmount",
+      value: function componentWillUnmount() {
+        this.unsubscribe.map(function (fn) {
+          return fn();
+        });
       }
     }, {
       key: "render",
@@ -174,12 +75,7 @@ define(["exports", "module", "react", "utils/BEM", "immutable", "utils/helper"],
                 );
               })
             );
-          }),
-          _React.createElement(
-            "button",
-            { style: { marginTop: 50 }, onClick: this.newMaze.bind(this) },
-            "Rerender"
-          )
+          })
         );
       }
     }]);
@@ -188,5 +84,21 @@ define(["exports", "module", "react", "utils/BEM", "immutable", "utils/helper"],
   })(_React.Component);
 
   module.exports = Maze;
+
+  function foo() {
+    var pointer;
+    return regeneratorRuntime.wrap(function foo$(context$1$0) {
+      while (1) switch (context$1$0.prev = context$1$0.next) {
+        case 0:
+          pointer = 0;
+          context$1$0.next = 3;
+          return pointer++;
+
+        case 3:
+        case "end":
+          return context$1$0.stop();
+      }
+    }, marked0$0[0], this);
+  }
 });
 //# sourceMappingURL=../../js/components/Maze.js.map
