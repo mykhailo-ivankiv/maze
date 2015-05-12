@@ -1,5 +1,7 @@
 import React from "react";
 import BEM from "utils/BEM";
+import Immutable from "immutable";
+
 import {getRandomInt} from "utils/helper";
 
 var b = BEM.b("maze");
@@ -19,70 +21,105 @@ class Maze extends React.Component {
    */
 
   renderMaze () {
-    const MAZE_WIDTH = 13;
-    const MAZE_LENGTH = 13;
+    const MAZE_WIDTH = 15;
+    const MAZE_LENGTH = 15;
 
-    let startSet = Array.apply(null, {length: MAZE_WIDTH}).map((el, i)=> i);
+    let startSet = Array.apply(null, {length: MAZE_WIDTH}).map((el, i)=> ({
+      top: false,
+      left: false,
+      bottom: false,
+      right: false,
+      value: i
+    }));
     let result = [];
 
-    for (let i=0; i < MAZE_LENGTH; i += 1) {
-      startSet.forEach((el, i) => {
-        if (Math.random() < 0.5 && startSet[i-1] !== undefined) { startSet[i] = startSet[i-1]; }
+    for (let rowIndex=0; rowIndex < MAZE_LENGTH; rowIndex += 1) {
+      let lengthOfSubset = 1;
+
+      startSet
+        .map((cell, cellIndex) => {
+          if (startSet[cellIndex + 1] !== undefined && startSet[cellIndex + 1].value === cell.value) {
+            cell.right = true;
+          } else if (Math.random() < 0.5 && startSet[cellIndex + 1] !== undefined) {
+            startSet[cellIndex + 1].value = cell.value;
+          } else {
+            cell.right = true;
+          }
+
+          cell.top = rowIndex === 0;
+          cell.left = cellIndex === 0;
+          cell.right = (cellIndex === (MAZE_WIDTH - 1)) || cell.right;
+
+          return cell;
+        })
+        .map((el, k) => {
+          if (startSet[k + 1] !== undefined && startSet[k + 1].value === el.value) {
+            lengthOfSubset += 1;
+          } else {
+            let doorCount = getRandomInt(1, lengthOfSubset);
+
+            for (let f = k; f > k - lengthOfSubset; f -= 1) {
+              if (doorCount === 0) {
+                startSet[f].bottom = true;
+              } else if (doorCount === f - k + lengthOfSubset) {
+                doorCount -= 1;
+                startSet[f].bottom = false;
+              } else if (Math.random() > 0.5) {
+                startSet[f].bottom = true;
+              } else {
+                doorCount -= 1;
+                startSet[f].bottom = false;
+              }
+            }
+
+            lengthOfSubset = 1;
+          }
+        });
+
+      result.push(startSet);
+
+      startSet = Immutable.fromJS(startSet).toJS()
+        .map((el,index, array) => {
+          if (el.bottom) {
+            el.value = this.getFirstUniqueInt(array.map(el => el.value));
+          }
+          el.bottom = false;
+          el.right = false;
+          return el;
+        })
+
+    }
+
+    result[result.length - 1]
+      .forEach((el, index, array)=>{
+        el.bottom = true;
+
+        if(array[index+1]) {
+          console.log(el.value, array[index+1].value, array.map(el=>el.value));
+        }
+
+        if (array[index+1] && el.value !== array[index+1].value) {
+          el.right = false;
+          array[index+1].value = el.value;
+        }
+
       });
 
-      let bottomBorders = this.getBottomBordersArray(startSet);
+    return result;
+  }
 
-      result.push(startSet.map((el, j) => ({
-        top: i === 0,
-        left: j === 0 || (startSet[el - 1] !== undefined && el !== startSet[j - 1]),
-        bottom: i === (MAZE_LENGTH - 1) || bottomBorders[j],
-        right: j === (MAZE_WIDTH - 1),
-        value: el
-      })));
+  getFirstUniqueInt(arr) {
+    let result = 0;
 
-      startSet = startSet.map((el, i) => {
-        return bottomBorders[i] ? i : el;
-      });
-
-      console.log(JSON.stringify(startSet));
+    while (arr.indexOf(result) >= 0) {
+      result+=1;
     }
 
     return result;
   }
 
-  getBottomBordersArray (startSet) {
-    let setLength = 1;
-    let bottomBorders = [];
-
-    startSet.forEach((el, k) => {
-      if (startSet[k+1] !== undefined && startSet[k+1] === el) {
-        setLength += 1;
-      } else {
-
-        let doorCount = 1 //getRandomInt(1, setLength);
-        bottomBorders = bottomBorders.concat(Array
-          .apply(null, {length: setLength})
-          .map((el, i, array) => {
-            if (array.length - i === doorCount) {
-              doorCount -= 1;
-              return false;
-            } else if (doorCount === 0) {
-              return true;
-            } else {
-              if (Math.random() > 0.3) {
-                doorCount -= 1;
-                return false;
-              } else {
-                return true;
-              }
-            }
-          }));
-
-        setLength = 1;
-      }
-    });
-
-    return bottomBorders;
+  newMaze() {
+    this.setState({maze: this.renderMaze()})
   }
 
   render () {
@@ -96,8 +133,10 @@ class Maze extends React.Component {
             left: cell.left,
             bottom: cell.bottom,
             right: cell.right
-           })}></div>)}
+           })}>{cell.value}</div>)}
         </div>))}
+
+        <button style = {{marginTop: 50}} onClick={this.newMaze.bind(this)}>Rerender</button>
       </div>
     )
   };

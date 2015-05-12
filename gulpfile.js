@@ -26,7 +26,9 @@ gulp.task("process-styles", function (){
 gulp.task("process-scripts", function (){
     gulp.src(["src/**/*.js"])
         .pipe(plumber())
+        .pipe(sourcemaps.init())
         .pipe(babel({modules: "amd", optional: ["es7.classProperties"], blacklist: ["useStrict"]}))
+        .pipe(sourcemaps.write("."))
         .pipe(plumber.stop())
         .pipe(gulp.dest("dist"));
 });

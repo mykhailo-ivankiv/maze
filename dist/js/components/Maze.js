@@ -1,4 +1,4 @@
-define(["exports", "module", "react", "utils/BEM", "utils/helper"], function (exports, module, _react, _utilsBEM, _utilsHelper) {
+define(["exports", "module", "react", "utils/BEM", "immutable", "utils/helper"], function (exports, module, _react, _utilsBEM, _immutable, _utilsHelper) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
@@ -14,6 +14,8 @@ define(["exports", "module", "react", "utils/BEM", "utils/helper"], function (ex
   var _React = _interopRequire(_react);
 
   var _BEM = _interopRequire(_utilsBEM);
+
+  var _Immutable = _interopRequire(_immutable);
 
   var b = _BEM.b("maze");
 
@@ -41,81 +43,111 @@ define(["exports", "module", "react", "utils/BEM", "utils/helper"], function (ex
       value: function renderMaze() {
         var _this2 = this;
 
-        var MAZE_WIDTH = 13;
-        var MAZE_LENGTH = 13;
+        var MAZE_WIDTH = 15;
+        var MAZE_LENGTH = 15;
 
         var startSet = Array.apply(null, { length: MAZE_WIDTH }).map(function (el, i) {
-          return i;
+          return {
+            top: false,
+            left: false,
+            bottom: false,
+            right: false,
+            value: i
+          };
         });
         var result = [];
 
-        var _loop = function (i) {
-          startSet.forEach(function (el, i) {
-            if (Math.random() < 0.5 && startSet[i - 1] !== undefined) {
-              startSet[i] = startSet[i - 1];
+        var _loop = function (rowIndex) {
+          var lengthOfSubset = 1;
+
+          startSet.map(function (cell, cellIndex) {
+            if (startSet[cellIndex + 1] !== undefined && startSet[cellIndex + 1].value === cell.value) {
+              cell.right = true;
+            } else if (Math.random() < 0.5 && startSet[cellIndex + 1] !== undefined) {
+              startSet[cellIndex + 1].value = cell.value;
+            } else {
+              cell.right = true;
+            }
+
+            cell.top = rowIndex === 0;
+            cell.left = cellIndex === 0;
+            cell.right = cellIndex === MAZE_WIDTH - 1 || cell.right;
+
+            return cell;
+          }).map(function (el, k) {
+            if (startSet[k + 1] !== undefined && startSet[k + 1].value === el.value) {
+              lengthOfSubset += 1;
+            } else {
+              var doorCount = _utilsHelper.getRandomInt(1, lengthOfSubset);
+
+              for (var f = k; f > k - lengthOfSubset; f -= 1) {
+                if (doorCount === 0) {
+                  startSet[f].bottom = true;
+                } else if (doorCount === f - k + lengthOfSubset) {
+                  doorCount -= 1;
+                  startSet[f].bottom = false;
+                } else if (Math.random() > 0.5) {
+                  startSet[f].bottom = true;
+                } else {
+                  doorCount -= 1;
+                  startSet[f].bottom = false;
+                }
+              }
+
+              lengthOfSubset = 1;
             }
           });
 
-          var bottomBorders = _this2.getBottomBordersArray(startSet);
+          result.push(startSet);
 
-          result.push(startSet.map(function (el, j) {
-            return {
-              top: i === 0,
-              left: j === 0 || startSet[el - 1] !== undefined && el !== startSet[j - 1],
-              bottom: i === MAZE_LENGTH - 1 || bottomBorders[j],
-              right: j === MAZE_WIDTH - 1,
-              value: el
-            };
-          }));
-
-          startSet = startSet.map(function (el, i) {
-            return bottomBorders[i] ? i : el;
+          startSet = _Immutable.fromJS(startSet).toJS().map(function (el, index, array) {
+            if (el.bottom) {
+              el.value = _this2.getFirstUniqueInt(array.map(function (el) {
+                return el.value;
+              }));
+            }
+            el.bottom = false;
+            el.right = false;
+            return el;
           });
-
-          console.log(JSON.stringify(startSet));
         };
 
-        for (var i = 0; i < MAZE_LENGTH; i += 1) {
-          _loop(i);
+        for (var rowIndex = 0; rowIndex < MAZE_LENGTH; rowIndex += 1) {
+          _loop(rowIndex);
+        }
+
+        result[result.length - 1].forEach(function (el, index, array) {
+          el.bottom = true;
+
+          if (array[index + 1]) {
+            console.log(el.value, array[index + 1].value, array.map(function (el) {
+              return el.value;
+            }));
+          }
+
+          if (array[index + 1] && el.value !== array[index + 1].value) {
+            el.right = false;
+            array[index + 1].value = el.value;
+          }
+        });
+
+        return result;
+      }
+    }, {
+      key: "getFirstUniqueInt",
+      value: function getFirstUniqueInt(arr) {
+        var result = 0;
+
+        while (arr.indexOf(result) >= 0) {
+          result += 1;
         }
 
         return result;
       }
     }, {
-      key: "getBottomBordersArray",
-      value: function getBottomBordersArray(startSet) {
-        var setLength = 1;
-        var bottomBorders = [];
-
-        startSet.forEach(function (el, k) {
-          if (startSet[k + 1] !== undefined && startSet[k + 1] === el) {
-            setLength += 1;
-          } else {
-            (function () {
-
-              var doorCount = 1; //getRandomInt(1, setLength);
-              bottomBorders = bottomBorders.concat(Array.apply(null, { length: setLength }).map(function (el, i, array) {
-                if (array.length - i === doorCount) {
-                  doorCount -= 1;
-                  return false;
-                } else if (doorCount === 0) {
-                  return true;
-                } else {
-                  if (Math.random() > 0.3) {
-                    doorCount -= 1;
-                    return false;
-                  } else {
-                    return true;
-                  }
-                }
-              }));
-
-              setLength = 1;
-            })();
-          }
-        });
-
-        return bottomBorders;
+      key: "newMaze",
+      value: function newMaze() {
+        this.setState({ maze: this.renderMaze() });
       }
     }, {
       key: "render",
@@ -130,15 +162,24 @@ define(["exports", "module", "react", "utils/BEM", "utils/helper"], function (ex
               "div",
               { className: b("row") },
               row.map(function (cell, index) {
-                return _React.createElement("div", { className: b("cell", {
-                    top: cell.top,
-                    left: cell.left,
-                    bottom: cell.bottom,
-                    right: cell.right
-                  }) });
+                return _React.createElement(
+                  "div",
+                  { className: b("cell", {
+                      top: cell.top,
+                      left: cell.left,
+                      bottom: cell.bottom,
+                      right: cell.right
+                    }) },
+                  cell.value
+                );
               })
             );
-          })
+          }),
+          _React.createElement(
+            "button",
+            { style: { marginTop: 50 }, onClick: this.newMaze.bind(this) },
+            "Rerender"
+          )
         );
       }
     }]);
@@ -148,3 +189,4 @@ define(["exports", "module", "react", "utils/BEM", "utils/helper"], function (ex
 
   module.exports = Maze;
 });
+//# sourceMappingURL=../../js/components/Maze.js.map

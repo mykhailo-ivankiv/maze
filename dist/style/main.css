@@ -1,6 +1,6 @@
 .maze {
-  height: 360px;
-  width: 360px;
+  height: 390px;
+  width: 390px;
   margin: 20px auto; }
   .maze__row {
     overflow: hidden; }

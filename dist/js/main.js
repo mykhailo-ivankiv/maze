@@ -7,3 +7,4 @@ define(["exports", "react", "components/Maze"], function (exports, _react, _comp
 
   _React.render(_React.createElement(_Maze, null), document.body);
 });
+//# sourceMappingURL=../js/main.js.map

@@ -1,8 +1,15 @@
 $wall-color: #1b1b1b;
 
+$maze-row-count: 15;
+$maze-cell-count: 15;
+
+$cell-size: 20px;
+$cell-border-size: 2px;
+$cell-margin: 1px;
+
 .maze {
-  height: 15 * (20px + (1 * 2) + (1 * 2));
-  width: 15 * (20px + (1 * 2) + (1 * 2));
+  height: ($maze-cell-count) * ($cell-size + 2 * ($cell-margin + $cell-border-size));
+  width: ($maze-row-count)* ($cell-size + 2 * ($cell-margin + $cell-border-size));
   margin: 20px auto;
 
   &__row {
@@ -11,16 +18,16 @@ $wall-color: #1b1b1b;
 
   &__cell {
     float: left;
-    width: 20px;
-    height: 20px;
-    margin: 1px;
-    border: 2px solid transparent; //#ECF0F1
+    width: $cell-size;
+    height: $cell-size;
+    margin: $cell-margin;
+    border: $cell-border-size solid transparent; //#ECF0F1
     font: 8px/20px Pt Sans;
     text-align: center;
 
-    &--right  {border-right: 2px solid $wall-color; }
-    &--left   {border-left: 2px solid $wall-color;}
-    &--top    {border-top: 2px solid $wall-color;}
-    &--bottom {border-bottom: 2px solid $wall-color;}
+    &--right  {border-right: $cell-border-size solid $wall-color; }
+    &--left   {border-left: $cell-border-size solid $wall-color;}
+    &--top    {border-top: $cell-border-size solid $wall-color;}
+    &--bottom {border-bottom: $cell-border-size solid $wall-color;}
   }
 }
