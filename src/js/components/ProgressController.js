@@ -2,9 +2,8 @@ import React from "react";
 import BEM from "utils/BEM";
 import {MazeStore, MazeActions} from "storage/MazeStore";
 
-
 var b = BEM.b("progress-controller");
-var f = BEM.b("form-element")
+var f = BEM.b("form-element");
 
 class ProgressController extends React.Component {
   constructor (pref) {
@@ -22,6 +21,7 @@ class ProgressController extends React.Component {
       activeProgress: MazeStore.getActiveProgress(),
     });
   }
+
 
   componentDidMount () {
     this.unsubscribe = [
@@ -57,8 +57,10 @@ class ProgressController extends React.Component {
           : <button className={f("button")} onClick={this.play.bind(this)} ><i className = "fa fa-play"/></button>
         }
 
-
         <button className={f("button")} onClick = {this.nextMazeStep.bind(this)}><i className="fa fa-forward"/></button>
+
+        <br/>
+
         <div className={b("progress")}>
           <div style={{width: ((this.state.totalProgress * 100)/ 15) + "%"}} className={b("total-progress")}></div>
           <div style={{width: ((this.state.activeProgress * 100)/ 15) + "%"}} className={b("active-position")}></div>

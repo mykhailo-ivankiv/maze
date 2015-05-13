@@ -107,7 +107,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
             break;
           }
 
-          return context$1$0.delegateYield(_loop(rowIndex), "t187", 8);
+          return context$1$0.delegateYield(_loop(rowIndex), "t3", 8);
 
         case 8:
           rowIndex += 1;

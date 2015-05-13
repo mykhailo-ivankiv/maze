@@ -101,6 +101,7 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
             { className: f("button"), onClick: this.nextMazeStep.bind(this) },
             _React.createElement("i", { className: "fa fa-forward" })
           ),
+          _React.createElement("br", null),
           _React.createElement(
             "div",
             { className: b("progress") },
