@@ -18,10 +18,9 @@ class ProgressController extends React.Component {
   onMazeChange () {
     this.setState({
       totalProgress: MazeStore.getTotalProgress(),
-      activeProgress: MazeStore.getActiveProgress(),
+      activeProgress: MazeStore.getActiveProgress()
     });
   }
-
 
   componentDidMount () {
     this.unsubscribe = [
@@ -58,9 +57,7 @@ class ProgressController extends React.Component {
         }
 
         <button className={f("button")} onClick = {this.nextMazeStep.bind(this)}><i className="fa fa-forward"/></button>
-
         <br/>
-
         <div className={b("progress")}>
           <div style={{width: ((this.state.totalProgress * 100)/ 15) + "%"}} className={b("total-progress")}></div>
           <div style={{width: ((this.state.activeProgress * 100)/ 15) + "%"}} className={b("active-position")}></div>
