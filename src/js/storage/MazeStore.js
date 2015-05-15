@@ -57,7 +57,7 @@ function *renderMaze () {
         }
       });
 
-    result.push(startSet);
+    result.push(Immutable.fromJS(startSet).toJS());
 
     yield(result);
 
