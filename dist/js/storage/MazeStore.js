@@ -17,16 +17,17 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
    * EN - http://www.neocomputer.org/projects/eller.html
    */
   function renderMaze() {
-    var MAZE_WIDTH, MAZE_LENGTH, startSet, result, _loop, rowIndex;
+    var mazeWidth = arguments[0] === undefined ? 15 : arguments[0];
+    var mazeLength = arguments[1] === undefined ? 15 : arguments[1];
+
+    var startSet, result, _loop, rowIndex;
 
     return regeneratorRuntime.wrap(function renderMaze$(context$1$0) {
       var _this = this;
 
       while (1) switch (context$1$0.prev = context$1$0.next) {
         case 0:
-          MAZE_WIDTH = 15;
-          MAZE_LENGTH = 15;
-          startSet = Array.apply(null, { length: MAZE_WIDTH }).map(function (el, i) {
+          startSet = Array.apply(null, { length: mazeWidth }).map(function (el, i) {
             return { top: false, left: false, bottom: false, right: false, value: i };
           });
           result = [];
@@ -48,7 +49,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
                     cell.top = rowIndex === 0;
                     cell.left = cellIndex === 0;
-                    cell.right = cellIndex === MAZE_WIDTH - 1 || cell.right;
+                    cell.right = cellIndex === mazeWidth - 1 || cell.right;
 
                     return cell;
                   }).map(function (el, k) {
@@ -75,7 +76,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
                     }
                   });
 
-                  result.push(startSet);
+                  result.push(_Immutable.fromJS(startSet).toJS());
 
                   context$2$0.next = 5;
                   return result;
@@ -101,20 +102,20 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
           });
           rowIndex = 0;
 
-        case 6:
-          if (!(rowIndex < MAZE_LENGTH)) {
-            context$1$0.next = 11;
+        case 4:
+          if (!(rowIndex < mazeLength)) {
+            context$1$0.next = 9;
             break;
           }
 
-          return context$1$0.delegateYield(_loop(rowIndex), "t3", 8);
+          return context$1$0.delegateYield(_loop(rowIndex), "t5", 6);
 
-        case 8:
+        case 6:
           rowIndex += 1;
-          context$1$0.next = 6;
+          context$1$0.next = 4;
           break;
 
-        case 11:
+        case 9:
 
           result[result.length - 1].forEach(function (el, index, array) {
             el.bottom = true;
@@ -133,7 +134,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
           return context$1$0.abrupt("return", result);
 
-        case 13:
+        case 11:
         case "end":
           return context$1$0.stop();
       }

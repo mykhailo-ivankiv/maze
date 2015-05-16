@@ -37,7 +37,8 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
       value: function onMazeChange() {
         this.setState({
           totalProgress: _storageMazeStore.MazeStore.getTotalProgress(),
-          activeProgress: _storageMazeStore.MazeStore.getActiveProgress() });
+          activeProgress: _storageMazeStore.MazeStore.getActiveProgress()
+        });
       }
     }, {
       key: "componentDidMount",

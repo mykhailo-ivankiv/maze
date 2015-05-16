@@ -7,14 +7,14 @@ import {getFirstUniqueInt, getRandomInt} from "utils/helper";
  * RU - http://habrahabr.ru/post/176671/
  * EN - http://www.neocomputer.org/projects/eller.html
  */
-function *renderMaze () {
-  const MAZE_WIDTH = 15;
-  const MAZE_LENGTH = 15;
+function *renderMaze (mazeWidth = 15, mazeLength = 15) {
 
-  let startSet = Array.apply(null, {length: MAZE_WIDTH}).map((el, i)=> ({ top: false, left: false, bottom: false, right: false, value: i}));
+  let startSet = Array
+                  .apply(null, {length: mazeWidth})
+                  .map((el, i)=> ({ top: false, left: false, bottom: false, right: false, value: i}));
   let result = [];
 
-  for (let rowIndex=0; rowIndex < MAZE_LENGTH; rowIndex += 1) {
+  for (let rowIndex=0; rowIndex < mazeLength; rowIndex += 1) {
     let lengthOfSubset = 1;
 
     startSet
@@ -29,7 +29,7 @@ function *renderMaze () {
 
         cell.top = rowIndex === 0;
         cell.left = cellIndex === 0;
-        cell.right = (cellIndex === (MAZE_WIDTH - 1)) || cell.right;
+        cell.right = (cellIndex === (mazeWidth - 1)) || cell.right;
 
         return cell;
       })
