@@ -29,5 +29,7 @@ $cell-margin: 1px;
     &--left   {border-left: $cell-border-size solid $wall-color;}
     &--top    {border-top: $cell-border-size solid $wall-color;}
     &--bottom {border-bottom: $cell-border-size solid $wall-color;}
+
+    &--active {background-color: red }
   }
 }

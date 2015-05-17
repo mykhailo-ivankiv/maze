@@ -8,11 +8,17 @@ var b = BEM.b("maze");
 class Maze extends React.Component {
   constructor (pref) {
     super();
-    this.state = { maze: MazeStore.getMaze() };
+    this.state = {
+      maze: MazeStore.getMaze(),
+      algorithmState : MazeStore.getAlgorithmState()
+    };
   }
 
   onMazeChange () {
-    this.setState({ maze: MazeStore.getMaze() });
+    this.setState({
+      maze: MazeStore.getMaze(),
+      algorithmState : MazeStore.getAlgorithmState()
+    });
   }
 
   componentDidMount () {
@@ -29,15 +35,17 @@ class Maze extends React.Component {
     var {maze} = this.state;
     return (
       <div className={b()}>
+        {this.state.algorithmState.description}
 
-        {maze.map((row => <div className={b("row")}>
-          {row.map((cell, index) => <div className = {b("cell",{
+        {maze.map((row, rowIndex) => <div className={b("row")}>
+          {row.map((cell, cellIndex) => <div className = {b("cell",{
+            active: this.state.algorithmState.activeRowIndex  === rowIndex && this.state.algorithmState.activeCellIndex === cellIndex,
             top: cell.top,
             left: cell.left,
             bottom: cell.bottom,
             right: cell.right
            })}>{cell.value}</div>)}
-        </div>))}
+        </div>)}
       </div>
     )
   };

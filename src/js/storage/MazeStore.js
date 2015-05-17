@@ -7,59 +7,78 @@ import {getFirstUniqueInt, getRandomInt} from "utils/helper";
  * RU - http://habrahabr.ru/post/176671/
  * EN - http://www.neocomputer.org/projects/eller.html
  */
+
+var algorythmState;
 function *renderMaze (mazeWidth = 15, mazeLength = 15) {
 
   let startSet = Array
                   .apply(null, {length: mazeWidth})
                   .map((el, i)=> ({ top: false, left: false, bottom: false, right: false, value: i}));
-  let result = [];
 
-  for (let rowIndex=0; rowIndex < mazeLength; rowIndex += 1) {
+
+  let result = Immutable.List();
+  algorythmState = {description: "Create initial set"}
+
+  for (let rowIndex=0; rowIndex < mazeLength; rowIndex += 1) { //set right border;
+    result = result.push(startSet);
+    algorythmState.activeRowIndex = rowIndex;
+    yield result.toJS();
+
     let lengthOfSubset = 1;
 
-    startSet
-      .map((cell, cellIndex) => {
-        if (startSet[cellIndex + 1] !== undefined && startSet[cellIndex + 1].value === cell.value) {
-          cell.right = true;
-        } else if (Math.random() < 0.5 && startSet[cellIndex + 1] !== undefined) {
-          startSet[cellIndex + 1].value = cell.value;
-        } else {
-          cell.right = true;
-        }
+    for (let cellIndex = 0; cellIndex < startSet.length; cellIndex +=1) {
+      algorythmState.description = "Set right border";
+      algorythmState.activeCellIndex = cellIndex;
 
-        cell.top = rowIndex === 0;
-        cell.left = cellIndex === 0;
-        cell.right = (cellIndex === (mazeWidth - 1)) || cell.right;
+      let cell = startSet[cellIndex];
 
-        return cell;
-      })
-      .map((el, k) => {
-        if (startSet[k + 1] !== undefined && startSet[k + 1].value === el.value) {
-          lengthOfSubset += 1;
-        } else {
-          let doorCount = getRandomInt(1, lengthOfSubset);
+      if (startSet[cellIndex + 1] !== undefined && startSet[cellIndex + 1].value === cell.value) {
+        cell.right = true;
+      } else if (Math.random() < 0.5 && startSet[cellIndex + 1] !== undefined) {
+        startSet[cellIndex + 1].value = cell.value;
+      } else {
+        cell.right = true;
+      }
 
-          for (let f = k; f > k - lengthOfSubset; f -= 1) {
-            if (doorCount === 0) {
-              startSet[f].bottom = true;
-            } else if (doorCount === f - k + lengthOfSubset) {
-              doorCount -= 1;
-              startSet[f].bottom = false;
-            } else if (Math.random() > 0.5) {
-              startSet[f].bottom = true;
-            } else {
-              doorCount -= 1;
-              startSet[f].bottom = false;
-            }
+      cell.top = rowIndex === 0;
+      cell.left = cellIndex === 0;
+      cell.right = (cellIndex === (mazeWidth - 1)) || cell.right;
+
+      yield result.toJS();
+    }
+
+    for (let k = 0; k < startSet.length; k+=1) {
+      algorythmState.description = "Set bottom border";
+      algorythmState.activeCellIndex = k;
+
+      let el = startSet[k];
+      if (startSet[k + 1] !== undefined && startSet[k + 1].value === el.value) {
+        lengthOfSubset += 1;
+      } else {
+        let doorCount = getRandomInt(1, lengthOfSubset);
+
+        for (let f = k; f > k - lengthOfSubset; f -= 1) {
+          if (doorCount === 0) {
+            startSet[f].bottom = true;
+          } else if (doorCount === f - k + lengthOfSubset) {
+            doorCount -= 1;
+            startSet[f].bottom = false;
+          } else if (Math.random() > 0.5) {
+            startSet[f].bottom = true;
+          } else {
+            doorCount -= 1;
+            startSet[f].bottom = false;
           }
-
-          lengthOfSubset = 1;
         }
-      });
 
-    result.push(Immutable.fromJS(startSet).toJS());
+        lengthOfSubset = 1;
+      }
+      yield result.toJS();
+    }
 
-    yield(result);
+    //result = result.push(Immutable.fromJS(startSet).toJS());
+
+    yield result.toJS();
 
     startSet = Immutable.fromJS(startSet).toJS()
       .map((el,index, array) => {
@@ -70,10 +89,9 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
         el.right = false;
         return el;
       })
-
   }
 
-  result[result.length - 1]
+  result.get(result.length - 1)
     .forEach((el, index, array)=>{
       el.bottom = true;
 
@@ -88,7 +106,7 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
 
     });
 
-  return result;
+  return result.toJS();
 }
 
 
@@ -117,6 +135,10 @@ export var MazeStore = Reflux.createStore({
 
   getMaze () {
     return maze.slice(0, this.pointer);
+  },
+
+  getAlgorithmState() {
+    return algorythmState;
   },
 
   getTotalProgress () {
