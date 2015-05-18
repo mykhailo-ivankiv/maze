@@ -24,7 +24,10 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
       _classCallCheck(this, Maze);
 
       _get(Object.getPrototypeOf(Maze.prototype), "constructor", this).call(this);
-      this.state = { maze: _storageMazeStore.MazeStore.getMaze() };
+      this.state = {
+        maze: _storageMazeStore.MazeStore.getMaze(),
+        algorithmState: _storageMazeStore.MazeStore.getAlgorithmState()
+      };
     }
 
     _inherits(Maze, _React$Component);
@@ -32,7 +35,10 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
     _createClass(Maze, [{
       key: "onMazeChange",
       value: function onMazeChange() {
-        this.setState({ maze: _storageMazeStore.MazeStore.getMaze() });
+        this.setState({
+          maze: _storageMazeStore.MazeStore.getMaze(),
+          algorithmState: _storageMazeStore.MazeStore.getAlgorithmState()
+        });
       }
     }, {
       key: "componentDidMount",
@@ -49,19 +55,23 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
     }, {
       key: "render",
       value: function render() {
+        var _this2 = this;
+
         var maze = this.state.maze;
 
         return _React.createElement(
           "div",
           { className: b() },
-          maze.map(function (row) {
+          this.state.algorithmState.description,
+          maze.map(function (row, rowIndex) {
             return _React.createElement(
               "div",
               { className: b("row") },
-              row.map(function (cell, index) {
+              row.map(function (cell, cellIndex) {
                 return _React.createElement(
                   "div",
                   { className: b("cell", {
+                      active: _this2.state.algorithmState.activeRowIndex === rowIndex && _this2.state.algorithmState.activeCellIndex === cellIndex,
                       top: cell.top,
                       left: cell.left,
                       bottom: cell.bottom,

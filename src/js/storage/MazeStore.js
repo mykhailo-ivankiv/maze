@@ -15,7 +15,6 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
                   .apply(null, {length: mazeWidth})
                   .map((el, i)=> ({ top: false, left: false, bottom: false, right: false, value: i}));
 
-
   let result = Immutable.List();
   algorythmState = {description: "Create initial set"}
 
