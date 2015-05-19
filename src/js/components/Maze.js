@@ -33,13 +33,14 @@ class Maze extends React.Component {
 
   render () {
     var {maze} = this.state;
+    var {activeRowIndex, activeCellIndex} = this.state.algorithmState;
+
     return (
       <div className={b()}>
-        {this.state.algorithmState.description}
-
         {maze.map((row, rowIndex) => <div className={b("row")}>
           {row.map((cell, cellIndex) => <div className = {b("cell",{
-            active: this.state.algorithmState.activeRowIndex  === rowIndex && this.state.algorithmState.activeCellIndex === cellIndex,
+            active: activeRowIndex  === rowIndex && activeCellIndex === cellIndex,
+            "sub-active" : activeRowIndex  === rowIndex && (activeCellIndex + 1) === cellIndex,
             top: cell.top,
             left: cell.left,
             bottom: cell.bottom,

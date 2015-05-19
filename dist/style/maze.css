@@ -21,7 +21,9 @@
     .maze__cell--bottom {
       border-bottom: 2px solid #1b1b1b; }
     .maze__cell--active {
-      background-color: red; }
+      background-color: #2ecc71; }
+    .maze__cell--sub-active {
+      background-color: #f1c40f; }
 
 
 /*# sourceMappingURL=../style/maze.css.map */

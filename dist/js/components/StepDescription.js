@@ -11,28 +11,26 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
 
   var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-  var marked0$0 = [foo].map(regeneratorRuntime.mark);
-
   var _React = _interopRequire(_react);
 
   var _BEM = _interopRequire(_utilsBEM);
 
-  var b = _BEM.b("maze");
+  var b = _BEM.b("step-descriuption");
 
-  var Maze = (function (_React$Component) {
-    function Maze(pref) {
-      _classCallCheck(this, Maze);
+  var StepDescription = (function (_React$Component) {
+    function StepDescription(pref) {
+      _classCallCheck(this, StepDescription);
 
-      _get(Object.getPrototypeOf(Maze.prototype), "constructor", this).call(this);
+      _get(Object.getPrototypeOf(StepDescription.prototype), "constructor", this).call(this);
       this.state = {
-        maze: _storageMazeStore.MazeStore.getMaze(),
-        algorithmState: _storageMazeStore.MazeStore.getAlgorithmState()
+        algorithmState: _storageMazeStore.MazeStore.getAlgorithmState(),
+        maze: _storageMazeStore.MazeStore.getMaze()
       };
     }
 
-    _inherits(Maze, _React$Component);
+    _inherits(StepDescription, _React$Component);
 
-    _createClass(Maze, [{
+    _createClass(StepDescription, [{
       key: "onMazeChange",
       value: function onMazeChange() {
         this.setState({
@@ -55,57 +53,17 @@ define(["exports", "module", "react", "utils/BEM", "storage/MazeStore"], functio
     }, {
       key: "render",
       value: function render() {
-        var maze = this.state.maze;
-        var _state$algorithmState = this.state.algorithmState;
-        var activeRowIndex = _state$algorithmState.activeRowIndex;
-        var activeCellIndex = _state$algorithmState.activeCellIndex;
-
         return _React.createElement(
           "div",
           { className: b() },
-          maze.map(function (row, rowIndex) {
-            return _React.createElement(
-              "div",
-              { className: b("row") },
-              row.map(function (cell, cellIndex) {
-                return _React.createElement(
-                  "div",
-                  { className: b("cell", {
-                      active: activeRowIndex === rowIndex && activeCellIndex === cellIndex,
-                      "sub-active": activeRowIndex === rowIndex && activeCellIndex + 1 === cellIndex,
-                      top: cell.top,
-                      left: cell.left,
-                      bottom: cell.bottom,
-                      right: cell.right
-                    }) },
-                  cell.value
-                );
-              })
-            );
-          })
+          this.state.algorithmState.description
         );
       }
     }]);
 
-    return Maze;
+    return StepDescription;
   })(_React.Component);
 
-  module.exports = Maze;
-
-  function foo() {
-    var pointer;
-    return regeneratorRuntime.wrap(function foo$(context$1$0) {
-      while (1) switch (context$1$0.prev = context$1$0.next) {
-        case 0:
-          pointer = 0;
-          context$1$0.next = 3;
-          return pointer++;
-
-        case 3:
-        case "end":
-          return context$1$0.stop();
-      }
-    }, marked0$0[0], this);
-  }
+  module.exports = StepDescription;
 });
-//# sourceMappingURL=../../js/components/Maze.js.map
+//# sourceMappingURL=../../js/components/StepDescription.js.map

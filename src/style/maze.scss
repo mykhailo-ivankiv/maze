@@ -25,11 +25,12 @@ $cell-margin: 1px;
     font: 8px/20px Pt Sans;
     text-align: center;
 
-    &--right  {border-right: $cell-border-size solid $wall-color; }
-    &--left   {border-left: $cell-border-size solid $wall-color;}
-    &--top    {border-top: $cell-border-size solid $wall-color;}
-    &--bottom {border-bottom: $cell-border-size solid $wall-color;}
+    &--right  { border-right: $cell-border-size solid $wall-color; }
+    &--left   { border-left: $cell-border-size solid $wall-color;}
+    &--top    { border-top: $cell-border-size solid $wall-color;}
+    &--bottom { border-bottom: $cell-border-size solid $wall-color;}
 
-    &--active {background-color: red }
+    &--active     { background-color: #2ecc71; }
+    &--sub-active { background-color: #f1c40f; }
   }
 }

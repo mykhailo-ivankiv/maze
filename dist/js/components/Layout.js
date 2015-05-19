@@ -1,4 +1,4 @@
-define(["exports", "module", "react", "utils/BEM", "components/Maze", "components/ProgressController"], function (exports, module, _react, _utilsBEM, _componentsMaze, _componentsProgressController) {
+define(["exports", "module", "react", "utils/BEM", "components/Maze", "components/ProgressController", "components/StepDescription"], function (exports, module, _react, _utilsBEM, _componentsMaze, _componentsProgressController, _componentsStepDescription) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
@@ -18,6 +18,8 @@ define(["exports", "module", "react", "utils/BEM", "components/Maze", "component
   var _Maze = _interopRequire(_componentsMaze);
 
   var _ProgressController = _interopRequire(_componentsProgressController);
+
+  var _StepDescription = _interopRequire(_componentsStepDescription);
 
   var b = _BEM.b("layout");
 
@@ -41,6 +43,11 @@ define(["exports", "module", "react", "utils/BEM", "components/Maze", "component
             "div",
             { className: b("tools") },
             _React.createElement(_ProgressController, null)
+          ),
+          _React.createElement(
+            "div",
+            { className: b("description") },
+            _React.createElement(_StepDescription, null)
           ),
           _React.createElement(
             "div",
