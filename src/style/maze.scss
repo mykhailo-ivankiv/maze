@@ -3,7 +3,7 @@ $wall-color: #1b1b1b;
 $maze-row-count: 15;
 $maze-cell-count: 15;
 
-$cell-size: 20px;
+$cell-size: 30px;
 $cell-border-size: 2px;
 $cell-margin: 1px;
 
@@ -22,7 +22,7 @@ $cell-margin: 1px;
     height: $cell-size;
     margin: $cell-margin;
     border: $cell-border-size solid transparent; //#ECF0F1
-    font: 8px/20px Pt Sans;
+    font: 11px/30px Pt Sans;
     text-align: center;
 
     &--right  { border-right: $cell-border-size solid $wall-color; }
