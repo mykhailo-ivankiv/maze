@@ -10,10 +10,9 @@ import {getFirstUniqueInt, getRandomInt} from "utils/helper";
 
 var algorythmState;
 function *renderMaze (mazeWidth = 15, mazeLength = 15) {
-
   let startSet = Array
                   .apply(null, {length: mazeWidth})
-                  .map((el, i)=> ({ top: false, left: false, bottom: false, right: false, value: i}));
+                  .map((el, i) => ({ top: false, left: false, bottom: false, right: false, value: i}));
 
   let result = Immutable.List();
   algorythmState = {description: "Create initial set"}
@@ -28,6 +27,8 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
     for (let cellIndex = 0; cellIndex < startSet.length; cellIndex +=1) {
       algorythmState.description = "Set right border";
       algorythmState.activeCellIndex = cellIndex;
+
+      yield result.toJS();
 
       let cell = startSet[cellIndex];
 

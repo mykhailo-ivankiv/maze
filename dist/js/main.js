@@ -1,10 +1,10 @@
 define(["exports", "react", "components/Layout"], function (exports, _react, _componentsLayout) {
-  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-  var _React = _interopRequire(_react);
+  var _React = _interopRequireDefault(_react);
 
-  var _Layout = _interopRequire(_componentsLayout);
+  var _Layout = _interopRequireDefault(_componentsLayout);
 
-  _React.render(_React.createElement(_Layout, null), document.body);
+  _React["default"].render(_React["default"].createElement(_Layout["default"], null), document.body);
 });
 //# sourceMappingURL=../js/main.js.map

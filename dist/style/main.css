@@ -1,16 +1,16 @@
 .maze {
-  height: 390px;
-  width: 390px;
+  height: 540px;
+  width: 540px;
   margin: 20px auto; }
   .maze__row {
     overflow: hidden; }
   .maze__cell {
     float: left;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     margin: 1px;
     border: 2px solid transparent;
-    font: 8px/20px Pt Sans;
+    font: 11px/30px Pt Sans;
     text-align: center; }
     .maze__cell--right {
       border-right: 2px solid #1b1b1b; }
@@ -30,8 +30,8 @@
   font: 15px Pt Sans;
   width: 200px;
   left: 50%;
-  margin-left: -430px;
-  top: 75px;
+  margin-left: -510px;
+  top: 70px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px; }

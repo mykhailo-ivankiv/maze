@@ -3,13 +3,13 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
     value: true
   });
 
-  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
   var marked0$0 = [renderMaze].map(regeneratorRuntime.mark);
 
-  var _Reflux = _interopRequire(_reflux);
+  var _Reflux = _interopRequireDefault(_reflux);
 
-  var _Immutable = _interopRequire(_immutable);
+  var _Immutable = _interopRequireDefault(_immutable);
 
   /**
    * Eller's Algorithm
@@ -28,7 +28,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
           startSet = Array.apply(null, { length: mazeWidth }).map(function (el, i) {
             return { top: false, left: false, bottom: false, right: false, value: i };
           });
-          result = _Immutable.List();
+          result = _Immutable["default"].List();
 
           algorythmState = { description: "Create initial set" };
 
@@ -36,7 +36,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
         case 4:
           if (!(rowIndex < mazeLength)) {
-            context$1$0.next = 41;
+            context$1$0.next = 43;
             break;
           }
 
@@ -52,13 +52,17 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
         case 11:
           if (!(cellIndex < startSet.length)) {
-            context$1$0.next = 24;
+            context$1$0.next = 26;
             break;
           }
 
           algorythmState.description = "Set right border";
           algorythmState.activeCellIndex = cellIndex;
 
+          context$1$0.next = 16;
+          return result.toJS();
+
+        case 16:
           cell = startSet[cellIndex];
 
           if (startSet[cellIndex + 1] !== undefined && startSet[cellIndex + 1].value === cell.value) {
@@ -73,20 +77,20 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
           cell.left = cellIndex === 0;
           cell.right = cellIndex === mazeWidth - 1 || cell.right;
 
-          context$1$0.next = 21;
+          context$1$0.next = 23;
           return result.toJS();
 
-        case 21:
+        case 23:
           cellIndex += 1;
           context$1$0.next = 11;
           break;
 
-        case 24:
+        case 26:
           k = 0;
 
-        case 25:
+        case 27:
           if (!(k < startSet.length)) {
-            context$1$0.next = 35;
+            context$1$0.next = 37;
             break;
           }
 
@@ -98,7 +102,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
           if (startSet[k + 1] !== undefined && startSet[k + 1].value === el.value) {
             lengthOfSubset += 1;
           } else {
-            doorCount = _utilsHelper.getRandomInt(1, lengthOfSubset);
+            doorCount = (0, _utilsHelper.getRandomInt)(1, lengthOfSubset);
 
             for (f = k; f > k - lengthOfSubset; f -= 1) {
               if (doorCount === 0) {
@@ -116,23 +120,23 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
             lengthOfSubset = 1;
           }
-          context$1$0.next = 32;
+          context$1$0.next = 34;
           return result.toJS();
 
-        case 32:
+        case 34:
           k += 1;
-          context$1$0.next = 25;
+          context$1$0.next = 27;
           break;
 
-        case 35:
-          context$1$0.next = 37;
+        case 37:
+          context$1$0.next = 39;
           return result.toJS();
 
-        case 37:
+        case 39:
 
-          startSet = _Immutable.fromJS(startSet).toJS().map(function (el, index, array) {
+          startSet = _Immutable["default"].fromJS(startSet).toJS().map(function (el, index, array) {
             if (el.bottom) {
-              el.value = _utilsHelper.getFirstUniqueInt(array.map(function (el) {
+              el.value = (0, _utilsHelper.getFirstUniqueInt)(array.map(function (el) {
                 return el.value;
               }));
             }
@@ -141,12 +145,12 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
             return el;
           });
 
-        case 38:
+        case 40:
           rowIndex += 1;
           context$1$0.next = 4;
           break;
 
-        case 41:
+        case 43:
 
           result.get(result.length - 1).forEach(function (el, index, array) {
             el.bottom = true;
@@ -165,20 +169,20 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
           return context$1$0.abrupt("return", result.toJS());
 
-        case 43:
+        case 45:
         case "end":
           return context$1$0.stop();
       }
     }, marked0$0[0], this);
   }
 
-  var MazeActions = _Reflux.createActions(["goToNextRow", "goToPrevRow"]);
+  var MazeActions = _Reflux["default"].createActions(["goToNextRow", "goToPrevRow"]);
 
   exports.MazeActions = MazeActions;
   var mazeGenerator = renderMaze();
   var maze = mazeGenerator.next().value;
 
-  var MazeStore = _Reflux.createStore({
+  var MazeStore = _Reflux["default"].createStore({
     pointer: 0,
     listenables: MazeActions,
 
