@@ -1,7 +1,9 @@
 .maze {
   height: 540px;
   width: 540px;
-  margin: 20px auto; }
+  margin: 20px auto;
+  position: relative;
+  left: 210px; }
   .maze__row {
     overflow: hidden; }
   .maze__cell {
@@ -27,13 +29,13 @@
 
 .layout__description {
   position: absolute;
-  font: 15px Pt Sans;
-  width: 200px;
+  font: 14px Pt Sans;
+  width: 400px;
   left: 50%;
-  margin-left: -510px;
+  margin-left: -500px;
   top: 70px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #CCC;
   border-radius: 5px; }
 
 .form-element__button {
@@ -74,6 +76,7 @@
     background: #e74c3c;
     display: inline-block;
     border-radius: 5px; }
+
 
 
 /*# sourceMappingURL=../style/main.css.map */

@@ -12,10 +12,10 @@ var algorythmState;
 function *renderMaze (mazeWidth = 15, mazeLength = 15) {
   let startSet = Array
                   .apply(null, {length: mazeWidth})
-                  .map((el, i) => ({ top: false, left: false, bottom: false, right: false, value: i}));
+                  .map((el, i) => ({ top: true, left: false, bottom: false, right: false, value: i}));
 
   let result = Immutable.List();
-  algorythmState = {description: "Create initial set"}
+  algorythmState = {description: "Create initial set"};
 
   for (let rowIndex=0; rowIndex < mazeLength; rowIndex += 1) { //set right border;
     result = result.push(startSet);
@@ -40,14 +40,13 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
         cell.right = true;
       }
 
-      cell.top = rowIndex === 0;
       cell.left = cellIndex === 0;
       cell.right = (cellIndex === (mazeWidth - 1)) || cell.right;
 
       yield result.toJS();
     }
 
-    for (let k = 0; k < startSet.length; k+=1) {
+    for (let k = 0; k < startSet.length; k+=1) { //set bottom border;
       algorythmState.description = "Set bottom border";
       algorythmState.activeCellIndex = k;
 
@@ -76,8 +75,6 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
       yield result.toJS();
     }
 
-    //result = result.push(Immutable.fromJS(startSet).toJS());
-
     yield result.toJS();
 
     startSet = Immutable.fromJS(startSet).toJS()
@@ -85,6 +82,7 @@ function *renderMaze (mazeWidth = 15, mazeLength = 15) {
         if (el.bottom) {
           el.value = getFirstUniqueInt(array.map(el => el.value));
         }
+        el.top = false;
         el.bottom = false;
         el.right = false;
         return el;

@@ -1,7 +1,9 @@
 .maze {
   height: 540px;
   width: 540px;
-  margin: 20px auto; }
+  margin: 20px auto;
+  position: relative;
+  left: 210px; }
   .maze__row {
     overflow: hidden; }
   .maze__cell {

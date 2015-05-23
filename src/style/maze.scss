@@ -11,6 +11,8 @@ $cell-margin: 1px;
   height: ($maze-cell-count) * ($cell-size + 2 * ($cell-margin + $cell-border-size));
   width: ($maze-row-count)* ($cell-size + 2 * ($cell-margin + $cell-border-size));
   margin: 20px auto;
+  position: relative;
+  left: 210px;
 
   &__row {
     overflow: hidden;

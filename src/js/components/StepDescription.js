@@ -2,7 +2,7 @@ import React from "react";
 import BEM from "utils/BEM";
 import {MazeStore, MazeActions} from "storage/MazeStore";
 
-var b = BEM.b("step-descriuption");
+var b = BEM.b("StepDescription");
 
 class StepDescription extends React.Component {
   constructor (pref) {

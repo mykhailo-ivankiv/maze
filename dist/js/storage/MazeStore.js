@@ -26,7 +26,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
       while (1) switch (context$1$0.prev = context$1$0.next) {
         case 0:
           startSet = Array.apply(null, { length: mazeWidth }).map(function (el, i) {
-            return { top: false, left: false, bottom: false, right: false, value: i };
+            return { top: true, left: false, bottom: false, right: false, value: i };
           });
           result = _Immutable["default"].List();
 
@@ -36,7 +36,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
         case 4:
           if (!(rowIndex < mazeLength)) {
-            context$1$0.next = 43;
+            context$1$0.next = 42;
             break;
           }
 
@@ -52,7 +52,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
         case 11:
           if (!(cellIndex < startSet.length)) {
-            context$1$0.next = 26;
+            context$1$0.next = 25;
             break;
           }
 
@@ -73,27 +73,27 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
             cell.right = true;
           }
 
-          cell.top = rowIndex === 0;
           cell.left = cellIndex === 0;
           cell.right = cellIndex === mazeWidth - 1 || cell.right;
 
-          context$1$0.next = 23;
+          context$1$0.next = 22;
           return result.toJS();
 
-        case 23:
+        case 22:
           cellIndex += 1;
           context$1$0.next = 11;
           break;
 
-        case 26:
+        case 25:
           k = 0;
 
-        case 27:
+        case 26:
           if (!(k < startSet.length)) {
-            context$1$0.next = 37;
+            context$1$0.next = 36;
             break;
           }
 
+          //set bottom border;
           algorythmState.description = "Set bottom border";
           algorythmState.activeCellIndex = k;
 
@@ -120,19 +120,19 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
             lengthOfSubset = 1;
           }
-          context$1$0.next = 34;
+          context$1$0.next = 33;
           return result.toJS();
 
-        case 34:
+        case 33:
           k += 1;
-          context$1$0.next = 27;
+          context$1$0.next = 26;
           break;
 
-        case 37:
-          context$1$0.next = 39;
+        case 36:
+          context$1$0.next = 38;
           return result.toJS();
 
-        case 39:
+        case 38:
 
           startSet = _Immutable["default"].fromJS(startSet).toJS().map(function (el, index, array) {
             if (el.bottom) {
@@ -140,17 +140,18 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
                 return el.value;
               }));
             }
+            el.top = false;
             el.bottom = false;
             el.right = false;
             return el;
           });
 
-        case 40:
+        case 39:
           rowIndex += 1;
           context$1$0.next = 4;
           break;
 
-        case 43:
+        case 42:
 
           result.get(result.length - 1).forEach(function (el, index, array) {
             el.bottom = true;
@@ -169,7 +170,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
 
           return context$1$0.abrupt("return", result.toJS());
 
-        case 45:
+        case 44:
         case "end":
           return context$1$0.stop();
       }
@@ -217,6 +218,4 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
   });
   exports.MazeStore = MazeStore;
 });
-
-//result = result.push(Immutable.fromJS(startSet).toJS());
 //# sourceMappingURL=../../js/storage/MazeStore.js.map
