@@ -144,6 +144,6 @@ export var MazeStore = Reflux.createStore({
   },
 
   getActiveProgress () {
-    return this.pointer;
+    return Math.round(this.pointer/48);
   }
 });

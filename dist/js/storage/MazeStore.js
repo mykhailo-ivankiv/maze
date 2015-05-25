@@ -213,7 +213,7 @@ define(["exports", "reflux", "immutable", "utils/helper"], function (exports, _r
     },
 
     getActiveProgress: function getActiveProgress() {
-      return this.pointer;
+      return Math.round(this.pointer / 48);
     }
   });
   exports.MazeStore = MazeStore;
